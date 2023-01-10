@@ -1,5 +1,5 @@
-import { Box, styled, Typography } from '@mui/material'
-import React, { useState, useEffect } from 'react'
+import { Box, Button, styled, Typography } from '@mui/material'
+import React, { useState } from 'react'
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft'
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight'
 
@@ -13,7 +13,7 @@ const StyledTypoBox = styled(Box)`
   border: 2px solid #a5a7a6;
   padding: 10px 17px;
 `
-const StyledButton = styled(Box)`
+const StyledMovingBox = styled(Button)`
   background-color: #014c6d;
   border: none;
   color: white;
@@ -24,7 +24,7 @@ const StyledButton = styled(Box)`
   cursor: pointer;
 `
 
-const StyledButton2 = styled(Box)`
+const StyledMovingBox2 = styled(Button)`
   background-color: #28708c;
   border: none;
   color: white;
@@ -35,7 +35,7 @@ const StyledButton2 = styled(Box)`
   cursor: pointer;
 `
 
-const StyledButton3 = styled(Box)`
+const StyledMovingBox3 = styled(Button)`
   background-color: #76afb5;
   border: none;
   color: white;
@@ -57,12 +57,9 @@ const StyledArrowCircleRightIcon = styled(ArrowCircleRightIcon)`
 `
 
 const SchoolShedule = () => {
-  const [enrolled, setEnrolled] = useState([])
 
-  const [books, setBooks] = useState(['gfdjdss'])
 
-  const [inclasses, setInClasses] = useState(['hsadghga'])
-
+  
   let enrolledValues = [
     'Phoenix Newton',
     'Raees Mayers',
@@ -75,61 +72,81 @@ const SchoolShedule = () => {
     'Larrissa Barker',
   ]
 
-  let booksValue = [];
-  let inclassValue = []
- 
-  function swipeData(enrolledValues,booksValue){
-    let swipeValue = enrolledValues.pop()
-    console.log(swipeValue);
-    console.log(enrolledValues);
-    setBooks([...booksValue,swipeValue])
- }
 
-  useEffect(() => {
-    setEnrolled(enrolledValues);
-    setBooks(booksValue);
-  }, [enrolledValues,booksValue])
+  const [enrolled, setEnrolled] = useState([...enrolledValues])
+
+  const [books, setBooks] = useState([])
+
+  const [inclasses, setInClasses] = useState([])
+
+
+ 
+  function swipeData(
+    data1, //from
+    data2, //to
+    data1a, //setfrom
+    data2a //setTo
+  ) {
+    if (data1.length > 0) {
+      let swipeValue = data1.shift();
+      data1a(data1);
+      data2a([...data2, swipeValue]);
+      console.log("swipeValue", swipeValue);
+      console.log("enrolled", data1);
+      console.log("books", data2);
+    }
+  }
   return (
-    <Box style={{ display: 'flex' }}>
+    <Box style={{ display: "flex" }}>
       <StyledBox style={{ marginLeft: 60 }}>
         <Box>
           <Typography> Enrolled with schoolcode </Typography>
           <StyledTypoBox>
-            {enrolled.map((enroll) => 
-              <StyledButton>{enroll}</StyledButton>
-            )}
+            {enrolled.map((enroll) => (
+              <StyledMovingBox>{enroll}</StyledMovingBox>
+            ))}
           </StyledTypoBox>
         </Box>
       </StyledBox>
-      <Box style={{ display: 'block' }}>
-        <StyledArrowCircleLeftIcon />
+      <Box style={{ display: "block" }}>
+        <StyledArrowCircleLeftIcon
+          onClick={() => swipeData(books, enrolled, setBooks, setEnrolled)}
+        />
         <br />
-        <StyledArrowCircleRightIcon style={{ marginLeft: 32 }} onClick={()=>swipeData(enrolledValues,booksValue)} />
+        <StyledArrowCircleRightIcon
+          style={{ marginLeft: 32 }}
+          onClick={() => swipeData(enrolled, books, setEnrolled, setBooks)}
+        />
       </Box>
       <StyledBox style={{ marginLeft: 10 }}>
         <Box>
           <Typography> Book for Class </Typography>
           <StyledTypoBox>
-          {books.map((book) => 
-              <StyledButton2>{book}</StyledButton2>
-            )}
+            {books.map((book) => (
+              <StyledMovingBox2>{book}</StyledMovingBox2>
+            ))}
           </StyledTypoBox>
         </Box>
       </StyledBox>
 
-      <Box style={{ display: 'block' }}>
-        <StyledArrowCircleLeftIcon />
+      <Box style={{ display: "block" }}>
+        <StyledArrowCircleLeftIcon
+          onClick={() => swipeData(inclasses, books, setInClasses, setBooks)}
+        />
         <br />
-        <StyledArrowCircleRightIcon style={{ marginLeft: 32 }} />
+        <StyledArrowCircleRightIcon
+          style={{ marginLeft: 32 }}
+          onClick={() => swipeData(books, inclasses, setBooks, setInClasses)}
+        />
       </Box>
 
       <StyledBox style={{ marginLeft: 10 }}>
         <Box>
           <Typography> In Class </Typography>
           <StyledTypoBox>
-          {inclasses.map((inclass) => 
-              <StyledButton3>{inclass}</StyledButton3>
-            )}
+            {inclasses.map((inclass) => (
+              <StyledMovingBox3>{inclass}</StyledMovingBox3>
+            ))}
           </StyledTypoBox>
         </Box>
       </StyledBox>
